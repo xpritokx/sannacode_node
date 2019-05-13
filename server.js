@@ -1,11 +1,11 @@
-var mongoose = require('mongoose');
-var dataHelper = require('./scripts/getData');
+const mongoose = require('mongoose');
+const facilitiesHandler = require('./controllers/getData');
 
-var DB_HOST = 'localhost';
-var DB_NAME = 'sanna_code';
-var DB_PORT = 27017;
+const DB_HOST = 'localhost';
+const DB_NAME = 'sanna_code';
+const DB_PORT = 27017;
 
-var db;
+let db;
 
 //DB_HOST, DB_NAME, DB_PORT
 mongoose.connect('mongodb://' + DB_HOST + ':' + DB_PORT + '/' + DB_NAME, {
@@ -19,7 +19,7 @@ db.once('connected', function () {
 
     require('./models/index');
 
-    dataHelper.getData();
+    facilitiesHandler.getData();
 });
 
 db.on('error', function(err){

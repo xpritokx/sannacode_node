@@ -5,37 +5,8 @@ var data = require('../constants/data').data;
 var FacilitySchema = require('../models/clubFacilities').Facility;
 
 function getData() {
-    var clubFacilitiesModel;
-    var clubRulesModel;
-
-    /*fs.readFile('./mongo_db_task.txt', 'utf8', function (err, data) {
-        if (err) {
-            return console.log(err);
-        }
-        console.log(data);
-
-        data = JSON.parse(data);
-        console.log(data);
-
-    });*/
-
-    /*clubFacilitiesData = {
-        club_id        : 'ololo1',
-        club_facilities: [
-            {
-                club_facility_id            : 'q',
-                facility_id                 : 'w',
-                club_facility_name_en       : 'e',
-                club_facility_name_it       : 'r',
-                club_facility_priority_order: 't',
-                club_facility_description_en: 'y',
-                club_facility_description_it: 'u',
-                club_facility_rule_id       : 'i'
-            }
-        ],
-        "createdAt"    : Date.now(),
-        "updatedAt"    : Date.now()
-    };*/
+    let clubFacilitiesModel;
+    let clubRulesModel;
 
     async.series([
         function (sCb) {
@@ -67,15 +38,13 @@ function getData() {
             });
         }
     ], function (err) {
+       let aggregationQuery;
+
        if (err) {
           return console.error(err);
        }
 
-       console.log('all data saved successfully');
-
-       console.log('we are getting data by "club_facility_id" ["442b0260-c378-11e6-849f-2d3cce21cca1', '4b77ab50-c0bb-11e6-a8cf-65fef1c91a7c"]');
-
-       FacilitySchema.aggregate([
+       aggregationQuery = [
            {
                $unwind: {
                    path: '$club_facilities'
@@ -135,7 +104,13 @@ function getData() {
                    }}
                }
            }
-       ]).then(function (result) {
+       ];
+
+       console.log('all data saved successfully');
+
+       console.log('we are getting data by "club_facility_id" ["442b0260-c378-11e6-849f-2d3cce21cca1', '4b77ab50-c0bb-11e6-a8cf-65fef1c91a7c"]');
+
+       FacilitySchema.aggregate(aggregationQuery).then(function (result) {
            console.log(result)
        });
     });
